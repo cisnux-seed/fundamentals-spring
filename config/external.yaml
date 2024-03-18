@@ -1,0 +1,4 @@
+application:
+  name: config
+  version: 2
+  production-mode: true
