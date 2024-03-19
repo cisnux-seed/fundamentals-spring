@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BodyControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">BodyControllerTest.java</span></div><h1>BodyControllerTest.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.cisnux.webmvc.models.HelloRequest;
+import dev.cisnux.webmvc.models.HelloResponse;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.MockMvcBuilder.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+<span class="nc" id="L25">class BodyControllerTest {</span>
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    void bodyHello() throws Exception {
+<span class="nc" id="L35">        final var request = new HelloRequest(&quot;cisnux&quot;);</span>
+
+<span class="nc" id="L37">        final var requestJson = objectMapper.writeValueAsString(request);</span>
+
+<span class="nc" id="L39">        mockMvc.perform(</span>
+<span class="nc" id="L40">                post(&quot;/body/hello&quot;)</span>
+<span class="nc" id="L41">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L42">                        .accept(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L43">                        .content(requestJson)</span>
+<span class="nc" id="L44">        ).andExpectAll(</span>
+<span class="nc" id="L45">                status().isOk(),</span>
+<span class="nc" id="L46">                header().string(HttpHeaders.CONTENT_TYPE, Matchers.containsString(MediaType.APPLICATION_JSON_VALUE))</span>
+<span class="nc" id="L47">        ).andExpect(result -&gt; {</span>
+<span class="nc" id="L48">            String responseJson = result.getResponse().getContentAsString();</span>
+
+<span class="nc" id="L50">            final var response = objectMapper.readValue(responseJson, HelloResponse.class);</span>
+<span class="nc" id="L51">            assertEquals(&quot;Hello cisnux&quot;, response.hello());</span>
+<span class="nc" id="L52">        });</span>
+<span class="nc" id="L53">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

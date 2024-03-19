@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">AuthController.java</span></div><h1>AuthController.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import dev.cisnux.webmvc.models.User;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+<span class="fc" id="L17">public class AuthController {</span>
+
+    @PostMapping(path = &quot;/auth/login&quot;, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity&lt;String&gt; login(
+            @RequestParam(name = &quot;username&quot;) String username,
+            @RequestParam(name = &quot;password&quot;) String password,
+            HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse
+    ) {
+<span class="nc bnc" id="L26" title="All 4 branches missed.">        if (&quot;fajra&quot;.equals(username) &amp;&amp; &quot;fajra123&quot;.equals(password)) {</span>
+            // save session on server
+            // if we have multiple app
+            // every app will have different sessions
+<span class="nc" id="L30">            final var session = servletRequest.getSession(true);</span>
+<span class="nc" id="L31">            session.setAttribute(&quot;user&quot;, new User(username));</span>
+
+            // save cookie on user browser
+<span class="nc" id="L34">            final var cookie = new Cookie(&quot;username&quot;, username);</span>
+<span class="nc" id="L35">            cookie.setPath(&quot;/&quot;);</span>
+<span class="nc" id="L36">            servletResponse.addCookie(cookie);</span>
+
+<span class="nc" id="L38">            return ResponseEntity.status(HttpStatus.OK).body(&quot;OK&quot;);</span>
+        } else {
+<span class="nc" id="L40">            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(&quot;KO&quot;);</span>
+        }
+    }
+
+    @GetMapping(path = &quot;/auth/user&quot;)
+    public ResponseEntity&lt;String&gt; getUser(@CookieValue(&quot;username&quot;) String username){
+<span class="nc" id="L46">        return ResponseEntity.ok(&quot;Hello &quot; + username);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

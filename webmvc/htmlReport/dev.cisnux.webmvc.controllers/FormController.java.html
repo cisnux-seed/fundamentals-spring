@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FormController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">FormController.java</span></div><h1>FormController.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+@Controller
+<span class="fc" id="L13">public class FormController {</span>
+    @PostMapping(path = &quot;/form/hello&quot;, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String hello(@RequestParam(name = &quot;name&quot;) String name) {
+<span class="nc" id="L17">        return &quot;&quot;&quot;</span>
+                &lt;html&gt;
+                &lt;body&gt;&lt;h1&gt;Hello $name&lt;/h1&gt;&lt;/body&gt;
+                &lt;/html&gt;
+<span class="nc" id="L21">                &quot;&quot;&quot;.replace(&quot;$name&quot;, name);</span>
+    }
+
+    @PostMapping(path = &quot;/form/person&quot;, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ResponseBody
+    public String createPerson(
+            @RequestParam(name = &quot;name&quot;) String name,
+            @RequestParam(name = &quot;birthDate&quot;) LocalDate birthDate,
+            @RequestParam(name = &quot;address&quot;) String address
+    ) {
+<span class="nc" id="L31">        return &quot;Success create Person with name : &quot; + name +</span>
+<span class="nc" id="L32">                &quot;, birthDate : &quot; + DateTimeFormatter.ISO_LOCAL_DATE.format(birthDate) +</span>
+                &quot;, address : &quot; + address;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

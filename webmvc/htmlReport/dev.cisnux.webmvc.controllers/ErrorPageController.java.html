@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorPageController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">ErrorPageController.java</span></div><h1>ErrorPageController.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+<span class="fc" id="L11">public class ErrorPageController implements ErrorController {</span>
+    @RequestMapping(path = &quot;/error&quot;)
+    public ResponseEntity&lt;String&gt; error(HttpServletRequest request) {
+<span class="nc" id="L14">        final var status = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);</span>
+<span class="nc" id="L15">        final var message = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);</span>
+
+<span class="nc" id="L17">        String html = &quot;&quot;&quot;</span>
+                &lt;html&gt;
+                &lt;body&gt;
+                &lt;h1&gt;$status - $message&lt;/h1&gt;
+                &lt;/body&gt;
+                &lt;/html&gt;
+<span class="nc" id="L23">                &quot;&quot;&quot;.replace(&quot;$status&quot;, status.toString()).replace(&quot;$message&quot;, message);</span>
+
+<span class="nc" id="L25">        return ResponseEntity.status(status).body(html);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

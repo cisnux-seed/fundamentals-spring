@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestTemplateTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">RestTemplateTest.java</span></div><h1>RestTemplateTest.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
+import java.util.List;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+<span class="nc" id="L18">public class RestTemplateTest {</span>
+
+    @LocalServerPort
+    private Integer port;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Test
+    void addTodo() {
+<span class="nc" id="L28">        final var url = &quot;http://localhost:&quot; + port + &quot;/todos&quot;;</span>
+
+<span class="nc" id="L30">        final var headers = new HttpHeaders();</span>
+<span class="nc" id="L31">        headers.setAccept(List.of(MediaType.APPLICATION_JSON));</span>
+
+<span class="nc" id="L33">        final var form = new LinkedMultiValueMap&lt;String, Object&gt;();</span>
+<span class="nc" id="L34">        form.add(&quot;todo&quot;, &quot;Belajar Spring WebMVC&quot;);</span>
+
+<span class="nc" id="L36">        final var request = new RequestEntity&lt;MultiValueMap&lt;String, Object&gt;&gt;(form, headers, HttpMethod.POST, URI.create(url));</span>
+
+        // for list/array we can use parameterized otherwise, we can use class reflection
+<span class="nc" id="L39">        final var response = restTemplate.exchange(request, new ParameterizedTypeReference&lt;List&lt;String&gt;&gt;() {</span>
+        });
+
+<span class="nc" id="L42">        Assertions.assertNotNull(response.getBody());</span>
+<span class="nc" id="L43">        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());</span>
+<span class="nc" id="L44">        Assertions.assertEquals(&quot;Belajar Spring WebMVC&quot;, response.getBody().getFirst());</span>
+<span class="nc" id="L45">    }</span>
+
+    @Test
+    void getTodos() {
+<span class="nc" id="L49">        final var url = &quot;http://localhost:&quot; + port + &quot;/todos&quot;;</span>
+
+<span class="nc" id="L51">        final var headers = new HttpHeaders();</span>
+<span class="nc" id="L52">        headers.setAccept(List.of(MediaType.APPLICATION_JSON));</span>
+
+<span class="nc" id="L54">        final var request = new RequestEntity&lt;&gt;(headers, HttpMethod.GET, URI.create(url));</span>
+
+<span class="nc" id="L56">        final var response = restTemplate.exchange(request, new ParameterizedTypeReference&lt;List&lt;String&gt;&gt;() {</span>
+        });
+
+<span class="nc" id="L59">        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());</span>
+<span class="nc" id="L60">        Assertions.assertEquals(&quot;Belajar Spring WebMVC&quot;, response.getBody().get(0));</span>
+<span class="nc" id="L61">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

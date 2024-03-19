@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HelloController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">HelloController.java</span></div><h1>HelloController.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import dev.cisnux.webmvc.services.HelloService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+@Controller
+<span class="fc" id="L21">public class HelloController {</span>
+    private HelloService helloService;
+
+    @Autowired
+    public void setHelloService(HelloService helloService) {
+<span class="fc" id="L26">        this.helloService = helloService;</span>
+<span class="fc" id="L27">    }</span>
+
+//    @RequestMapping(path = &quot;/hello&quot;, method = RequestMethod.GET)
+//    @GetMapping(path = &quot;/hello&quot;)
+//    public void helloWorld(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        response.getWriter().write(helloService.hello(request.getParameter(&quot;name&quot;)));
+//    }
+
+    @GetMapping(path = &quot;/hello&quot;)
+    public void helloWorld(@RequestParam(name = &quot;name&quot;, required = false) String name, HttpServletResponse response) throws IOException {
+<span class="nc" id="L37">        response.getWriter().write(helloService.hello(name));</span>
+<span class="nc" id="L38">    }</span>
+
+    // will return bad request 400 if name is null
+    // bcs name is required
+    @GetMapping(path = &quot;/hello/required&quot;)
+    public void requiredHelloWorld(@RequestParam(name = &quot;name&quot;) String name, HttpServletResponse response) throws IOException {
+<span class="nc" id="L44">        response.getWriter().write(helloService.hello(name));</span>
+<span class="nc" id="L45">    }</span>
+
+    @GetMapping(path = &quot;/web/hello&quot;)
+    public ModelAndView hello(@RequestParam(name = &quot;name&quot;, required = false) String name) {
+<span class="nc" id="L49">        return Optional.ofNullable(name).map(s -&gt; new ModelAndView(&quot;hello&quot;, Map.of(</span>
+                &quot;title&quot;, &quot;Belajar View&quot;,
+                &quot;name&quot;, name
+<span class="nc" id="L52">        ))).orElseGet(() -&gt; new ModelAndView(&quot;redirect:/web/hello?name=Guest&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

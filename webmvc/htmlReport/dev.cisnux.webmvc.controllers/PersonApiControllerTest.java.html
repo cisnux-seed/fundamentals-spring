@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonApiControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">PersonApiControllerTest.java</span></div><h1>PersonApiControllerTest.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.cisnux.webmvc.models.CreatePersonRequest;
+import dev.cisnux.webmvc.models.CreateSocialMediaRequest;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.MockMvcBuilder.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+<span class="nc" id="L25">class PersonApiControllerTest {</span>
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    void createPerson() throws Exception {
+<span class="nc" id="L35">        final var request = new CreatePersonRequest();</span>
+<span class="nc" id="L36">        request.setFirstName(&quot;Cisnux&quot;);</span>
+<span class="nc" id="L37">        request.setMiddleName(&quot;Fajra&quot;);</span>
+<span class="nc" id="L38">        request.setLastName(&quot;Risqulla&quot;);</span>
+<span class="nc" id="L39">        request.setEmail(&quot;fajra@gmail.com&quot;);</span>
+<span class="nc" id="L40">        request.setPhone(&quot;08213123&quot;);</span>
+<span class="nc" id="L41">        request.setHobbies(List.of(&quot;Coding&quot;, &quot;Reading&quot;, &quot;Gaming&quot;));</span>
+<span class="nc" id="L42">        request.setSocialMedias(new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L43">        request.getSocialMedias().add(new CreateSocialMediaRequest(&quot;Facebook&quot;, &quot;facebook.com/ProgrammerZamanNow&quot;));</span>
+<span class="nc" id="L44">        request.getSocialMedias().add(new CreateSocialMediaRequest(&quot;Instagram&quot;, &quot;instagram.com/ProgrammerZamanNow&quot;));</span>
+
+<span class="nc" id="L46">        String jsonRequest = objectMapper.writeValueAsString(request);</span>
+
+<span class="nc" id="L48">        mockMvc.perform(</span>
+<span class="nc" id="L49">                post(&quot;/api/person&quot;)</span>
+<span class="nc" id="L50">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L51">                        .accept(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L52">                        .content(jsonRequest)</span>
+<span class="nc" id="L53">        ).andExpectAll(</span>
+<span class="nc" id="L54">                status().isCreated(),</span>
+<span class="nc" id="L55">                content().json(jsonRequest)</span>
+        );
+<span class="nc" id="L57">    }</span>
+
+    @Test
+    void createPersonValidationError() throws Exception{
+<span class="nc" id="L61">        final var request = new CreatePersonRequest();</span>
+<span class="nc" id="L62">        request.setMiddleName(&quot;Fajra&quot;);</span>
+<span class="nc" id="L63">        request.setLastName(&quot;Risqulla&quot;);</span>
+<span class="nc" id="L64">        request.setEmail(&quot;fajra@gmail&quot;);</span>
+<span class="nc" id="L65">        request.setHobbies(List.of(&quot;&quot;, &quot;Reading&quot;, &quot;Gaming&quot;));</span>
+<span class="nc" id="L66">        request.setSocialMedias(new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L67">        request.getSocialMedias().add(new CreateSocialMediaRequest(&quot;Facebook&quot;, &quot;facebook.com/ProgrammerZamanNow&quot;));</span>
+<span class="nc" id="L68">        request.getSocialMedias().add(new CreateSocialMediaRequest(&quot;Instagram&quot;, &quot;instagram.com/ProgrammerZamanNow&quot;));</span>
+
+<span class="nc" id="L70">        String jsonRequest = objectMapper.writeValueAsString(request);</span>
+
+<span class="nc" id="L72">        mockMvc.perform(</span>
+<span class="nc" id="L73">                post(&quot;/api/person&quot;)</span>
+<span class="nc" id="L74">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L75">                        .accept(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L76">                        .content(jsonRequest)</span>
+<span class="nc" id="L77">        ).andExpectAll(</span>
+<span class="nc" id="L78">                status().isBadRequest(),</span>
+<span class="nc" id="L79">                content().string(Matchers.containsString(&quot;Validation Error&quot;))</span>
+        );
+<span class="nc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

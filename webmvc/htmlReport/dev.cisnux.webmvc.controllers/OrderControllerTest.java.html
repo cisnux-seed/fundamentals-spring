@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WebmvcApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.webmvc.controllers</a> &gt; <span class="el_source">OrderControllerTest.java</span></div><h1>OrderControllerTest.java</h1><pre class="source lang-java linenums">package dev.cisnux.webmvc.controllers;
+
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.MockMvcBuilder.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+
+
+@SpringBootTest
+@AutoConfigureMockMvc
+<span class="nc" id="L20">class OrderControllerTest {</span>
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void orderProduct() throws Exception {
+<span class="nc" id="L27">        mockMvc.perform(</span>
+<span class="nc" id="L28">                get(&quot;/orders/1/products/2&quot;)</span>
+<span class="nc" id="L29">        ).andExpectAll(</span>
+<span class="nc" id="L30">                status().isOk(),</span>
+<span class="nc" id="L31">                content().string(Matchers.containsString(&quot;Order : 1, Product : 2&quot;))</span>
+        );
+<span class="nc" id="L33">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
