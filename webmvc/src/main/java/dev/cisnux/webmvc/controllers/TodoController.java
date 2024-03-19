@@ -14,6 +14,8 @@ import java.util.List;
 public class TodoController {
     private final List<String> todos = Collections.synchronizedList(new ArrayList<>());
 
+    // post default consumes
+    // MediaType.APPLICATION_FORM_URLENCODED_VALUE
     @PostMapping(path = "/todos", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<String> addTodo(@RequestParam(name = "todo") String todo){
         todos.add(todo);

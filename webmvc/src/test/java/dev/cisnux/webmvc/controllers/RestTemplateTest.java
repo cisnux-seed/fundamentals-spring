@@ -35,6 +35,7 @@ public class RestTemplateTest {
 
         final var request = new RequestEntity<MultiValueMap<String, Object>>(form, headers, HttpMethod.POST, URI.create(url));
 
+        // for list/array we can use parameterized otherwise, we can use class reflection
         final var response = restTemplate.exchange(request, new ParameterizedTypeReference<List<String>>() {
         });
 
