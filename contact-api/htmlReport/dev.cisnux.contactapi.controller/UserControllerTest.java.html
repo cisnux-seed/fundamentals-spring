@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ContactApiApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.contactapi.controller</a> &gt; <span class="el_source">UserControllerTest.java</span></div><h1>UserControllerTest.java</h1><pre class="source lang-java linenums">package dev.cisnux.contactapi.controller;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.cisnux.contactapi.model.RegisterUserRequest;
+import dev.cisnux.contactapi.model.WebResponse;
+import dev.cisnux.contactapi.service.UserService;
+import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@DisplayName(&quot;user scenarios&quot;)
+<span class="nc" id="L29">class UserControllerTest {</span>
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserService userService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Nested
+    @DisplayName(&quot;when user register&quot;)
+<span class="nc" id="L41">    public class RegisterTest {</span>
+        @DisplayName(&quot;by valid request body then should be success (201)&quot;)
+        @Test
+        public void registerWithValid_shouldSuccess() throws Exception {
+<span class="nc" id="L45">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;cisnux&quot;).password(&quot;cisnux123&quot;).name(&quot;Cisnux Risqulla&quot;).build();</span>
+
+<span class="nc" id="L47">            doNothing()</span>
+<span class="nc" id="L48">                    .when(userService)</span>
+<span class="nc" id="L49">                    .register(registerUserRequest);</span>
+
+<span class="nc" id="L51">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isCreated()).andDo(result -&gt; {</span>
+<span class="nc" id="L52">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L54">                assertNotNull(webResponse.data());</span>
+<span class="nc" id="L55">                assertEquals(&quot;OK&quot;, webResponse.data());</span>
+<span class="nc" id="L56">            });</span>
+
+<span class="nc" id="L58">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L59">        }</span>
+
+        @DisplayName(&quot;by existed username then should return bad request (400)&quot;)
+        @Test
+        public void registerWithExistedUsername_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L64">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;cisnux&quot;).password(&quot;cisnux123&quot;).name(&quot;Cisnux Risqulla&quot;).build();</span>
+
+<span class="nc" id="L66">            doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;username has been used&quot;)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L68">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L69">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L71">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L72">                assertEquals(webResponse.errors(), &quot;username has been used&quot;);</span>
+<span class="nc" id="L73">            });</span>
+
+<span class="nc" id="L75">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L76">        }</span>
+
+        @DisplayName(&quot;by empty username then should return bad request (400)&quot;)
+        @Test
+        public void registerWithEmptyUsername_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L81">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;&quot;).password(&quot;cisnux123&quot;).name(&quot;Cisnux Risqulla&quot;).build();</span>
+
+<span class="nc" id="L83">            doThrow(new ConstraintViolationException(&quot;username is empty&quot;, null)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L85">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L86">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L88">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L89">            });</span>
+
+<span class="nc" id="L91">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L92">        }</span>
+
+        @DisplayName(&quot;by null username then should return bad request (400)&quot;)
+        @Test
+        public void registerWithNullUsername_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L97">            final var registerUserRequest = RegisterUserRequest.builder().username(null).password(&quot;cisnux123&quot;).name(&quot;Cisnux Risqulla&quot;).build();</span>
+
+<span class="nc" id="L99">            doThrow(new ConstraintViolationException(&quot;username is null&quot;, null)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L101">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L102">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L104">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L105">            });</span>
+
+<span class="nc" id="L107">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L108">        }</span>
+
+        @DisplayName(&quot;by empty password then should return bad request (400)&quot;)
+        @Test
+        public void registerWithEmptyPassword_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L113">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;cisnux&quot;).password(&quot;&quot;).name(&quot;Cisnux Risqulla&quot;).build();</span>
+
+<span class="nc" id="L115">            doThrow(new ConstraintViolationException(&quot;password is empty&quot;, null)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L117">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L118">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L120">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L121">            });</span>
+
+<span class="nc" id="L123">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L124">        }</span>
+
+        @DisplayName(&quot;by null password then should return bad request (400)&quot;)
+        @Test
+        public void registerWithNullPassword_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L129">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;cisnux&quot;).password(null).name(&quot;Cisnux Risqulla&quot;).build();</span>
+
+<span class="nc" id="L131">            doThrow(new ConstraintViolationException(&quot;password is null&quot;, null)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L133">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L134">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L136">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L137">            });</span>
+
+<span class="nc" id="L139">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L140">        }</span>
+
+        @DisplayName(&quot;by empty name then should return bad request (400)&quot;)
+        @Test
+        public void registerWithEmptyName_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L145">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;cisnux&quot;).password(&quot;cisnux123&quot;).name(&quot;&quot;).build();</span>
+
+<span class="nc" id="L147">            doThrow(new ConstraintViolationException(&quot;name is empty&quot;, null)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L149">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L150">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L152">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L153">            });</span>
+
+<span class="nc" id="L155">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L156">        }</span>
+
+        @DisplayName(&quot;by null name then should return bad request (400)&quot;)
+        @Test
+        public void registerWithNullName_ShouldReturnBadRequest() throws Exception {
+<span class="nc" id="L161">            final var registerUserRequest = RegisterUserRequest.builder().username(&quot;cisnux&quot;).password(&quot;cisnux123&quot;).name(null).build();</span>
+
+<span class="nc" id="L163">            doThrow(new ConstraintViolationException(&quot;name is null&quot;, null)).when(userService).register(registerUserRequest);</span>
+
+<span class="nc" id="L165">            mockMvc.perform(post(&quot;/api/users&quot;).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerUserRequest))).andExpectAll(status().isBadRequest()).andDo(result -&gt; {</span>
+<span class="nc" id="L166">                final var webResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference&lt;WebResponse&lt;String&gt;&gt;() {</span>
+                });
+<span class="nc" id="L168">                assertNotNull(webResponse.errors());</span>
+<span class="nc" id="L169">            });</span>
+
+<span class="nc" id="L171">            verify(userService, times(1)).register(registerUserRequest);</span>
+<span class="nc" id="L172">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

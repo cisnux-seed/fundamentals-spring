@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DatabaseMigrationSettings" lastSelectedDirectory="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/consoles/db/7c4abc92-5af4-4e8b-ad40-34eeaa73f698" />
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default">
+        <packages>
+          <package value="dev.cisnux.contactapi" />
+          <package value="dev.cisnux.contactapi.entity" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
+</project>

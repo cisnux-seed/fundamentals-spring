@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > User</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">dev.cisnux.contactapi.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: User (dev.cisnux.contactapi.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">User</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">User$HibernateInstantiator$C9tskDT4</td>
+  </tr>
+  <tr>
+    <td class="name">User$HibernateProxy$xQShJiYo</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package dev.cisnux.contactapi.entity;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import lombok.*;
+&nbsp;import org.hibernate.proxy.HibernateProxy;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@Getter
+<b class="nc">&nbsp;@Setter</b>
+&nbsp;@Entity
+<b class="nc">&nbsp;@ToString</b>
+&nbsp;@Table(name = &quot;users&quot;)
+<b class="nc">&nbsp;@NoArgsConstructor</b>
+&nbsp;public class User {
+&nbsp;    @Id
+<b class="nc">&nbsp;    private String username;</b>
+<b class="nc">&nbsp;    private String password;</b>
+<b class="nc">&nbsp;    private String name;</b>
+<b class="nc">&nbsp;    private String token;</b>
+&nbsp;    @Column(name = &quot;token_expired&quot;)
+<b class="nc">&nbsp;    private Long tokenExpired;</b>
+&nbsp;    @OneToMany(mappedBy = &quot;user&quot;)
+&nbsp;    // exclude lazy
+&nbsp;    @ToString.Exclude
+<b class="nc">&nbsp;    private List&lt;Contact&gt; contacts;</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public final boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (o == null) return false;</b>
+<b class="nc">&nbsp;        Class&lt;?&gt; oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();</b>
+<b class="nc">&nbsp;        Class&lt;?&gt; thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();</b>
+<b class="nc">&nbsp;        if (thisEffectiveClass != oEffectiveClass) return false;</b>
+<b class="nc">&nbsp;        User user = (User) o;</b>
+<b class="nc">&nbsp;        return getUsername() != null &amp;&amp; Objects.equals(getUsername(), user.getUsername());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public final int hashCode() {
+<b class="nc">&nbsp;        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-23 13:01</div>
+</div>
+</body>
+</html>

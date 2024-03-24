@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: contact-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/contact_api
+    username: root
+    password:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  jackson:
+    default-property-inclusion: non_null

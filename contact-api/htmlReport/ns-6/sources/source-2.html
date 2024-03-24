@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">dev.cisnux.contactapi.service</a>
+</div>
+
+<h1>Coverage Summary for Class: UserServiceImpl (dev.cisnux.contactapi.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package dev.cisnux.contactapi.service;
+&nbsp;
+&nbsp;import dev.cisnux.contactapi.entity.User;
+&nbsp;import dev.cisnux.contactapi.model.RegisterUserRequest;
+&nbsp;import dev.cisnux.contactapi.repostory.UserRepository;
+&nbsp;import dev.cisnux.contactapi.security.BCrypt;
+&nbsp;import jakarta.validation.ConstraintViolationException;
+&nbsp;import jakarta.validation.Validator;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.server.ResponseStatusException;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;@Service
+&nbsp;public class UserServiceImpl implements UserService {
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    private final Validator validator;
+&nbsp;    private final ValidationService validationService;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void register(RegisterUserRequest request) {
+<b class="nc">&nbsp;        validationService.validateObject(request);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (userRepository.existsById(request.username()))</b>
+<b class="nc">&nbsp;            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, &quot;username has been used&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        final var user = new User();</b>
+<b class="nc">&nbsp;        user.setUsername(request.username());</b>
+<b class="nc">&nbsp;        user.setPassword(BCrypt.hashpw(request.password(), BCrypt.gensalt()));</b>
+<b class="nc">&nbsp;        user.setName(request.name());</b>
+<b class="nc">&nbsp;        userRepository.save(user);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-23 13:01</div>
+</div>
+</body>
+</html>

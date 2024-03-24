@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ContactApiApplication Coverage Results</a> &gt; <a href="index.source.html" class="el_package">dev.cisnux.contactapi.entity</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package dev.cisnux.contactapi.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.List;
+import java.util.Objects;
+
+@Getter
+<span class="nc" id="L11">@Setter</span>
+@Entity
+<span class="nc" id="L13">@ToString</span>
+@Table(name = &quot;users&quot;)
+<span class="nc" id="L15">@NoArgsConstructor</span>
+public class User {
+    @Id
+<span class="nc" id="L18">    private String username;</span>
+<span class="nc" id="L19">    private String password;</span>
+<span class="nc" id="L20">    private String name;</span>
+<span class="nc" id="L21">    private String token;</span>
+    @Column(name = &quot;token_expired&quot;)
+<span class="nc" id="L23">    private Long tokenExpired;</span>
+    @OneToMany(mappedBy = &quot;user&quot;)
+    // exclude lazy
+    @ToString.Exclude
+<span class="nc" id="L27">    private List&lt;Contact&gt; contacts;</span>
+
+    @Override
+    public final boolean equals(Object o) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (o == null) return false;</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        Class&lt;?&gt; oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        Class&lt;?&gt; thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (thisEffectiveClass != oEffectiveClass) return false;</span>
+<span class="nc" id="L36">        User user = (User) o;</span>
+<span class="nc bnc" id="L37" title="All 4 branches missed.">        return getUsername() != null &amp;&amp; Objects.equals(getUsername(), user.getUsername());</span>
+    }
+
+    @Override
+    public final int hashCode() {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
