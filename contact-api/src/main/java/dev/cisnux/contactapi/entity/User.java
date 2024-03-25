@@ -19,6 +19,7 @@ public class User {
     private String password;
     private String name;
     private String token;
+    private Integer age;
     @Column(name = "token_expired")
     private Long tokenExpired;
     @OneToMany(mappedBy = "user")

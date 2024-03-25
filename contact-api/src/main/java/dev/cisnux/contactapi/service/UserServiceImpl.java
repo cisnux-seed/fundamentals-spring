@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(request.username());
         user.setPassword(BCrypt.hashpw(request.password(), BCrypt.gensalt()));
         user.setName(request.name());
+        user.setAge(request.age());
         userRepository.save(user);
     }
 
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
         return UserResponse.builder()
                 .username(user.getUsername())
                 .name(user.getName())
+                .age(user.getAge())
                 .build();
     }
 
@@ -60,6 +62,7 @@ public class UserServiceImpl implements UserService {
         return UserResponse.builder()
                 .username(user.getUsername())
                 .name(user.getName())
+                .age(user.getAge())
                 .build();
     }
 }
